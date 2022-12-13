@@ -2,10 +2,10 @@
 # pylint: disable=W0622
 
 
-"object programming runtime"
+"python3 shell commands"
 
 
-from opr import handler, object, thread
+from cmdz import handler, object, thread
 
 
 from cmdz.handler import *

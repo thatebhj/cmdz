@@ -1,7 +1,7 @@
 # This file is placed in the Public Domain.
 
 
-"python3 shell commands"
+"write your own commands"
 
 
 import os
@@ -31,11 +31,11 @@ def uploadlist(dir):
 
 setup(
     name="cmdz",
-    version="7",
+    version="1",
     author="B.H.J. Thate",
     author_email="thatebhj@gmail.com",
     url="http://github.com/thatebhj/cmdz",
-    description="python3 shell commands",
+    description="write your own commands",
     long_description=read(),
     long_description_content_type="text/x-rst",
     license="Public Domain",

@@ -20,15 +20,16 @@ from cmdz import command, launch, parse, scan, scandir, scanpkg, wait
 from cmdz import boot, importer, wrap
 
 
-import opmod
-
-
 Wd.workdir = os.path.expanduser("~/.cmdz")
 
 
 def main():
     boot(" ".join(sys.argv[1:]))
-    scandir("mod", importer, Cfg.sets.mods)
+    if os.path.exists("mod"):
+       wdr = os.path.join(os.getcwd(), "mod")
+    else:
+       wdr = Wd.moddir()
+    scandir(wdr, importer, Cfg.sets.mods or "cmds,log,shl,tdo")
     cli = CLI()
     command(cli, Cfg.otxt)
 
