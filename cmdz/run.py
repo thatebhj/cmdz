@@ -1,5 +1,5 @@
 # This file is placed in the Public Domain.
-# pylint: disable=C0115,C0116,C0411,C0413
+# pylint: disable=C0115,C0116,C0411,C0413,W0212
 
 
 "runtime"
@@ -118,7 +118,7 @@ def initer(pname, mname, path=None):
     if "init" in dir(mod):
         launch(mod.init)
     return mod
-    
+
 
 def print_exc(ex):
     traceback.print_exception(type(ex), ex, ex.__traceback__)

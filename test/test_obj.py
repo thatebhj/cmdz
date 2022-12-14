@@ -10,7 +10,7 @@ import unittest
 import _thread
 
 
-import opr.object
+import cmdz.object
 
 
 from cmdz.object import *

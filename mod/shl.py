@@ -8,7 +8,7 @@
 import time
 
 
-from cmdz import Cfg, Command, Console, printable, setcompleter, wait
+from cmdz import Cfg, Command, Console, printable, setcompleter
 
 
 def shl(event):
