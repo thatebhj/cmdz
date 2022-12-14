@@ -155,7 +155,7 @@ def mbx(event):
         pass
     for ema in thing:
         email = Email()
-        update(email, ema._headers)
+        update(email, Object(ema._headers))
         email.text = ""
         for payload in ema.walk():
             if payload.get_content_type() == 'text/plain':

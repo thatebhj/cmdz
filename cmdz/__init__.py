@@ -5,13 +5,15 @@
 "write your own commands"
 
 
-import cmdz.handler as handler
-import cmdz.object as object
-import cmdz.run as run
-import cmdz.thread as thread
+from cmdz import bus, event, handler, object, run, thread
 
 
-from cmdz.handler import *
+from cmdz.bus import *
 from cmdz.object import *
+from cmdz.event import *
+from cmdz.handler import *
 from cmdz.run import *
 from cmdz.thread import *
+
+
+from cmdz.object import scan as scancls

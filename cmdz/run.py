@@ -16,8 +16,13 @@ import termios
 import traceback
 
 
-from cmdz.handler import Cfg, Handler, Command, Event, parse, scan
+from cmdz.event import Event, Parsed
+from cmdz.handler import Handler, Command, scan
+from cmdz.object import Default, update
 from cmdz.thread import launch
+
+
+Cfg = Default()
 
 
 class CLI(Handler):
@@ -120,8 +125,48 @@ def initer(pname, mname, path=None):
     return mod
 
 
+def parse(txt):
+    prs = Parsed()
+    prs.parse(txt)
+    if "c" in prs.opts:
+        prs.console = True
+    if "d" in prs.opts:
+        prs.debug = True
+    if "v" in prs.opts:
+        prs.verbose = True
+    if "x" in prs.opts:
+        prs.exec = True
+    if "w" in prs.opts:
+        prs.wait = True
+    update(Cfg, prs)
+    return prs
+
+
+
 def print_exc(ex):
     traceback.print_exception(type(ex), ex, ex.__traceback__)
+
+
+def scandir(path, func):
+    res = []
+    if not os.path.exists(path):
+        return res
+    for fnm in os.listdir(path):
+        if fnm.endswith("~") or fnm.startswith("__"):
+            continue
+        try:
+            pname = fnm.split(os.sep)[-2]
+        except IndexError:
+            pname = path
+        mname = fnm.split(os.sep)[-1][:-3]
+        path2 = os.path.join(path, fnm)
+        res.append(func(pname, mname, path2))
+    return res
+
+
+def wait():
+    while 1:
+        time.sleep(1.0)
 
 
 def wrap(func):
@@ -139,3 +184,5 @@ def wrap(func):
     finally:
         if gotterm:
             termios.tcsetattr(fds, termios.TCSADRAIN, old)
+        for evt in Command.errors:
+            print_exc(evt.__exc__)

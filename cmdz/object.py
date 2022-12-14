@@ -84,6 +84,7 @@ def __dir__():
             'printable',
             'register',
             'save',
+            'scan',
             'spl',
             'update',
             'values',
@@ -465,7 +466,10 @@ def search(obj, selector):
     res = False
     select = Object(selector)
     for key, value in items(select):
-        val = getattr(obj, key)
+        try:
+            val = getattr(obj, key)
+        except AttributeError:
+            continue
         if str(value) in str(val):
             res = True
             break
@@ -546,6 +550,11 @@ def cdir(path):
         path = os.path.dirname(path)
     ppp = pathlib.Path(path)
     ppp.mkdir(parents=True, exist_ok=True)
+
+
+def scan(mod):
+    for _key, clz in inspect.getmembers(mod, inspect.isclass):
+        Class.add(clz)
 
 
 def spl(txt):

@@ -28,8 +28,7 @@ def main():
     scandir(Wd.moddir(), importer)
     scandir(Wd.moddir(), initer)
     cli = CLI()
-    evt = command(cli, Cfg.otxt)
-    evt.wait()
+    command(cli, Cfg.otxt)
 
 
 wrap(main)
