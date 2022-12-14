@@ -40,6 +40,10 @@ setup(
     long_description_content_type="text/x-rst",
     license="Public Domain",
     packages=["cmdz"],
+    include_package_data=True,
+    data_files=[
+                ("cmdz/mod", uploadlist("mod"))
+               ],
     scripts=["bin/cmdz"],
     classifiers=[
         "Development Status :: 4 - Beta",

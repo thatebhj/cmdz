@@ -16,11 +16,11 @@ import termios
 import traceback
 
 
-from cmdz.handler import Cfg, Client, Command, Event, parse, scan
+from cmdz.handler import Cfg, Handler, Command, Event, parse, scan
 from cmdz.thread import launch
 
 
-class CLI(Client):
+class CLI(Handler):
 
     def announce(self, txt):
         pass
@@ -101,7 +101,7 @@ def daemon():
         os.dup2(ses.fileno(), sys.stderr.fileno())
 
 
-def importer(pname, mname, path=None, init=False):
+def importer(pname, mname, path=None):
     if not path:
         path = pname
     mod = None
@@ -110,10 +110,15 @@ def importer(pname, mname, path=None, init=False):
         mod = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(mod)
         scan(mod)
-    if init and "init" in dir(mod):
-        launch(mod.init)        
     return mod
 
+
+def initer(pname, mname, path=None):
+    mod = importer(pname, mname, path)
+    if "init" in dir(mod):
+        launch(mod.init)
+    return mod
+    
 
 def print_exc(ex):
     traceback.print_exception(type(ex), ex, ex.__traceback__)

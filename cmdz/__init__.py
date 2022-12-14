@@ -2,25 +2,16 @@
 # pylint: disable=W0622
 
 
-"python3 shell commands"
+"write your own commands"
 
 
-from cmdz import handler, object, thread
+import cmdz.handler as handler
+import cmdz.object as object
+import cmdz.run as run
+import cmdz.thread as thread
 
 
 from cmdz.handler import *
 from cmdz.object import *
 from cmdz.run import *
 from cmdz.thread import *
-
-
-def __dir__():
-    return (
-            'handler',
-            'object',
-            'run',
-            'thread',
-           )
-
-
-__all__ = __dir__()

@@ -16,8 +16,8 @@ sys.path.insert(0, os.getcwd())
 
 
 from cmdz import Cfg, CLI, Command, Wd
-from cmdz import command, launch, parse, scan, scandir, scanpkg, wait
-from cmdz import boot, importer, wrap
+from cmdz import command, launch, parse, scan, scandir, wait
+from cmdz import boot, importer, initer, wrap
 
 
 Wd.workdir = os.path.expanduser("~/.cmdz")
@@ -29,7 +29,8 @@ def main():
        wdr = os.path.join(os.getcwd(), "mod")
     else:
        wdr = Wd.moddir()
-    scandir(wdr, importer, Cfg.sets.mods or "cmds,log,shl,tdo")
+    scandir(wdr, importer)
+    scandir(wdr, initer)
     cli = CLI()
     command(cli, Cfg.otxt)
 

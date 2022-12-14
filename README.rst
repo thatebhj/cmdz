@@ -4,7 +4,7 @@ README
 
 **NAME**
 
-``CMDZ`` - python3 shell commands
+``CMDZ`` - program your own commands
 
 
 **SYNOPSIS**

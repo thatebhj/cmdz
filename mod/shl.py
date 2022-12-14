@@ -1,5 +1,5 @@
 # This file is placed in the Public Domain.
-# pylint: disable=C0116,C0413,W0212
+# pylint: disable=C0116,C0413,W0212,C0301,W0613
 
 
 "shell"
@@ -8,7 +8,7 @@
 import time
 
 
-from cmdz import Cfg, Command, Console, printable, setcompleter
+from cmdz import Cfg, Command, Console, printable, setcompleter, wait
 
 
 def shl(event):

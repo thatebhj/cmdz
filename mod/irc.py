@@ -18,7 +18,7 @@ import threading
 import _thread
 
 
-from cmdz import Class, Client, Command, Default, Event, Object
+from cmdz import Class, Handler, Command, Default, Event, Object
 from cmdz import edit, fntime, find, keys, last, printable, save, update
 from cmdz import elapsed, launch, locked, register
 
@@ -40,7 +40,7 @@ __all__ = __dir__()
 
 
 NAME = "cmdz"
-REALNAME = "python3 shell commands"
+REALNAME = "program your own commands"
 
 
 saylock = _thread.allocate_lock()
@@ -176,10 +176,10 @@ class Output(Object):
         self.oqueue.put_nowait((None, None))
 
 
-class IRC(Client, Output):
+class IRC(Handler, Output):
 
     def __init__(self):
-        Client.__init__(self)
+        Handler.__init__(self)
         Output.__init__(self)
         self.buffer = []
         self.cfg = Config()
@@ -524,7 +524,7 @@ class IRC(Client, Output):
         self.connected.clear()
         self.joined.clear()
         launch(Output.start, self)
-        launch(Client.start, self)
+        launch(Handler.start, self)
         launch(
                self.doconnect,
                self.cfg.server,
@@ -539,7 +539,7 @@ class IRC(Client, Output):
             self.sock.shutdown(2)
         except OSError:
             pass
-        Client.stop(self)
+        Handler.stop(self)
 
 
 class Users(Object):
