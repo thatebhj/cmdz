@@ -42,7 +42,9 @@ setup(
     packages=["cmdz"],
     include_package_data=True,
     data_files=[
-                ("cmdz/mod", uploadlist("mod"))
+                ("cmdz/mod", uploadlist("mod")),
+                ("share/cmdz", uploadlist("extra")),
+                ("share/doc/cmdz", ("README.rst",))
                ],
     scripts=["bin/cmdz"],
     classifiers=[

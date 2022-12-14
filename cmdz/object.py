@@ -136,7 +136,9 @@ class Object:
         )
         if args:
             val = args[0]
-            if isinstance(val, zip):
+            if isinstance(val, list):
+                update(self, dict(val))
+            elif isinstance(val, zip):
                 update(self, dict(val))
             elif isinstance(val, dict):
                 update(self, val)

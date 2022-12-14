@@ -26,10 +26,15 @@ def fnd(event):
         return
     otype = event.args[0]
     nmr = 0
+    keyz = ",".join(keys(event.gets))
+    if len(event.args) > 1:
+        keyz += "," + ",".join(event.args[1:])
+    elif not keyz:
+        keyz = "," + ",".join(keys(obj))
     for obj in find(otype, event.gets):
         txt = "%s %s %s" % (
                             str(nmr),
-                            printable(obj, event.sets.keys or keys(obj), event.toskip),
+                            printable(obj, keyz, event.toskip),
                             elapsed(time.time()-fntime(obj.__fnm__))
                            )
         nmr += 1

@@ -25,8 +25,10 @@ Wd.workdir = os.path.expanduser("~/.cmdz")
 
 def main():
     boot(" ".join(sys.argv[1:]))
-    scandir(Wd.moddir(), importer)
-    scandir(Wd.moddir(), initer)
+    if os.path.exists("mod"):
+        scandir("mod", importer)
+    else:
+        scandir(Wd.moddir(), importer)
     cli = CLI()
     command(cli, Cfg.otxt)
 

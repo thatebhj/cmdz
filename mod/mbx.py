@@ -154,8 +154,7 @@ def mbx(event):
     except FileNotFoundError:
         pass
     for ema in thing:
-        email = Email()
-        update(email, Object(ema._headers))
+        email = Email(ema._headers)
         email.text = ""
         for payload in ema.walk():
             if payload.get_content_type() == 'text/plain':
