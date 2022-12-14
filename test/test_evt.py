@@ -8,7 +8,7 @@
 import unittest
 
 
-from cmdz.handler import Event
+from cmdz.event import Event
 
 
 class TestEvent(unittest.TestCase):

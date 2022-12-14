@@ -11,14 +11,13 @@ import time
 
 from cmdz.bus import Bus
 from cmdz.object import Default, register
+from cmdz.thread import elapsed
 
 
 def __dir__():
-     return (
+    return  (
              "Parsed",
              "Event",
-             "command",
-             "parse"
             )
 
 
@@ -110,29 +109,3 @@ class Event(Parsed):
         if self.__thr__:
             self.__thr__.join()
         self.__ready__.wait()
-
-
-def command(cli, txt, event=None):
-    evt = (event() if event else Event())
-    evt.parse(txt)
-    evt.orig = repr(cli)
-    cli.handle(evt)
-    evt.wait()
-    return evt
-
-
-def parse(txt):
-    prs = Parsed()
-    prs.parse(txt)
-    if "c" in prs.opts:
-        prs.console = True
-    if "d" in prs.opts:
-        prs.debug = True
-    if "v" in prs.opts:
-        prs.verbose = True
-    if "x" in prs.opts:
-        prs.exec = True
-    if "w" in prs.opts:
-        prs.wait = True
-    update(Cfg, prs)
-    return prs

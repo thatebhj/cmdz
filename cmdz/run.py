@@ -13,6 +13,7 @@ import readline
 import rlcompleter
 import sys
 import termios
+import time
 import traceback
 
 
@@ -20,6 +21,26 @@ from cmdz.event import Event, Parsed
 from cmdz.handler import Handler, Command, scan
 from cmdz.object import Default, update
 from cmdz.thread import launch
+
+
+def __dir__():
+    return (
+            "Cfg",
+            "CLI",
+            "Completer",
+            "Console",
+            "boot",
+            "command",
+            "daemon",
+            "importer",
+            "initer",
+            "parse",
+            "print_exc",
+            "setcompleter",
+            "Scandir",
+            "wait",
+            "wrap"
+           )
 
 
 Cfg = Default()
@@ -70,11 +91,6 @@ class Completer(rlcompleter.Completer):
             return None
 
 
-def setcompleter(optionlist):
-    completer = Completer(optionlist)
-    readline.set_completer(completer.complete)
-    readline.parse_and_bind("tab: complete")
-    atexit.register(lambda: readline.set_completer(None))
 
 
 def boot(txt):
@@ -89,6 +105,15 @@ def boot(txt):
         Cfg.wait = True
     if "x" in Cfg.opts:
         Cfg.exec = True
+
+
+def command(cli, txt, event=None):
+    evt = (event() if event else Event())
+    evt.parse(txt)
+    evt.orig = repr(cli)
+    cli.handle(evt)
+    evt.wait()
+    return evt
 
 
 def daemon():
@@ -142,7 +167,6 @@ def parse(txt):
     return prs
 
 
-
 def print_exc(ex):
     traceback.print_exception(type(ex), ex, ex.__traceback__)
 
@@ -162,6 +186,13 @@ def scandir(path, func):
         path2 = os.path.join(path, fnm)
         res.append(func(pname, mname, path2))
     return res
+
+
+def setcompleter(optionlist):
+    completer = Completer(optionlist)
+    readline.set_completer(completer.complete)
+    readline.parse_and_bind("tab: complete")
+    atexit.register(lambda: readline.set_completer(None))
 
 
 def wait():

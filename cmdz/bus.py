@@ -36,5 +36,3 @@ class Bus(Object):
         bot = Bus.byorig(orig)
         if bot:
             bot.say(channel, txt)
-
-

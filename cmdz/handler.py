@@ -6,7 +6,6 @@
 
 
 import inspect
-import os
 import queue
 import sys
 import threading
@@ -14,8 +13,8 @@ import time
 
 
 from cmdz.bus import Bus
-from cmdz.object import Class, Default, Object, register, update
-from cmdz.thread import elapsed, launch
+from cmdz.object import Object
+from cmdz.thread import launch
 
 
 def __dir__():
