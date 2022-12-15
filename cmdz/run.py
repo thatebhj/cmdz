@@ -1,5 +1,5 @@
 # This file is placed in the Public Domain.
-# pylint: disable=C0115,C0116,C0411,C0413,W0212,R0903,W0201
+# pylint: disable=C0115,C0116,C0411,C0413,W0212,R0903,W0201,E0402
 
 
 "runtime"
@@ -19,7 +19,7 @@ import traceback
 
 from .event import Event, Parsed
 from .handler import Handler, Command, scan
-from .object import Default, last, update
+from .object import Default, last, spl, update
 from .thread import launch
 
 
@@ -47,22 +47,27 @@ class Config(Default):
 
     pass
 
+
 Cfg = Config()
+Cfg.name = "cmdz"
 
 
 class CLI(Handler):
 
-    def announce(self, txt):
+    @staticmethod
+    def announce(txt):
         pass
 
-    def raw(self, txt):
+    @staticmethod
+    def raw(txt):
         print(txt)
         sys.stdout.flush()
 
 
 class Console(CLI):
 
-    def handle(self, event):
+    @staticmethod
+    def handle(event):
         Command.handle(event)
         event.wait()
 
@@ -134,6 +139,13 @@ def daemon():
         os.dup2(ses.fileno(), sys.stderr.fileno())
 
 
+def include(name, namelist):
+    for nme in namelist:
+        if nme in name:
+            return True
+    return False
+
+
 def importer(pname, mname, path=None):
     if not path:
         path = pname
@@ -174,11 +186,13 @@ def print_exc(ex):
     traceback.print_exception(type(ex), ex, ex.__traceback__)
 
 
-def scandir(path, func):
+def scandir(path, func, mods=None):
     res = []
     if not os.path.exists(path):
         return res
     for fnm in os.listdir(path):
+        if mods and not include(fnm, spl(mods)):
+           continue
         if fnm.endswith("~") or fnm.startswith("__"):
             continue
         try:

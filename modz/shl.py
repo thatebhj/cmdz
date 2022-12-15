@@ -15,7 +15,7 @@ from cmdz import scandir, initer
 def shl(event):
     setcompleter(Command.cmd)
     date = time.ctime(time.time()).replace("  ", " ")
-    print("CMDZ started at %s %s" % (date, printable(Cfg, "console,debug,verbose,wait", plain=True)))
+    print("%s started at %s %s" % (Cfg.name.upper(), date, printable(Cfg, "console,debug,verbose,wait", plain=True)))
     scandir(Wd.moddir(), initer)
     cli = Console()
     cli.start()

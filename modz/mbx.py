@@ -11,7 +11,7 @@ import time
 
 
 from cmdz import Class, Object
-from cmdz import elapsed, find, fntime, printable, save, update
+from cmdz import elapsed, find, fntime, printable, save
 
 
 def __dir__():
