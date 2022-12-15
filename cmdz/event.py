@@ -1,5 +1,5 @@
 # This file is placed in the Public Domain.
-# pylint: disable=C0115,C0116,W0703,W0201,R0902,R0903,W0613,R0201
+# pylint: disable=C0115,C0116,W0703,W0201,R0902,R0903,W0613,R0201,C0103
 
 
 "event"
@@ -94,6 +94,11 @@ class Event(Parsed):
     def done(self):
         diff = elapsed(time.time()-self.createtime)
         Bus.say(self.orig, self.channel, f'ok {diff}')
+
+    def ok(self, txt=None):
+        text = "ok " + txt or ""
+        text = text.rstrip()
+        Bus.say(self.orig, self.channel, txt)
 
     def ready(self):
         self.__ready__.set()

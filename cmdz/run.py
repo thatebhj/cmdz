@@ -1,5 +1,5 @@
 # This file is placed in the Public Domain.
-# pylint: disable=C0115,C0116,C0411,C0413,W0212
+# pylint: disable=C0115,C0116,C0411,C0413,W0212,R0903,W0201
 
 
 "runtime"
@@ -19,7 +19,7 @@ import traceback
 
 from cmdz.event import Event, Parsed
 from cmdz.handler import Handler, Command, scan
-from cmdz.object import Default, update
+from cmdz.object import Default, last, update
 from cmdz.thread import launch
 
 
@@ -43,7 +43,11 @@ def __dir__():
            )
 
 
-Cfg = Default()
+class Config(Default):
+
+    pass
+
+Cfg = Config()
 
 
 class CLI(Handler):
@@ -91,9 +95,8 @@ class Completer(rlcompleter.Completer):
             return None
 
 
-
-
 def boot(txt):
+    last(Cfg)
     parse(txt)
     if "c" in Cfg.opts:
         Cfg.console = True
