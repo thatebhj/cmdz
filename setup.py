@@ -31,7 +31,7 @@ def uploadlist(dir):
 
 setup(
     name="cmdz",
-    version="3",
+    version="4",
     author="B.H.J. Thate",
     author_email="thatebhj@gmail.com",
     url="http://github.com/thatebhj/cmdz",
