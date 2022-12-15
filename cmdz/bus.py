@@ -5,7 +5,7 @@
 "list of listeners"
 
 
-from cmdz.object import Object
+from .object import Object
 
 
 class Bus(Object):

@@ -9,9 +9,9 @@ import threading
 import time
 
 
-from cmdz.bus import Bus
-from cmdz.object import Default, register
-from cmdz.thread import elapsed
+from .bus import Bus
+from .object import Default, register
+from .thread import elapsed
 
 
 def __dir__():

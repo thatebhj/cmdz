@@ -12,9 +12,9 @@ import threading
 import time
 
 
-from cmdz.bus import Bus
-from cmdz.object import Object
-from cmdz.thread import launch
+from .bus import Bus
+from .object import Object
+from .thread import launch
 
 
 def __dir__():

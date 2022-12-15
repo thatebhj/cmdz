@@ -17,10 +17,10 @@ import time
 import traceback
 
 
-from cmdz.event import Event, Parsed
-from cmdz.handler import Handler, Command, scan
-from cmdz.object import Default, last, update
-from cmdz.thread import launch
+from .event import Event, Parsed
+from .handler import Handler, Command, scan
+from .object import Default, last, update
+from .thread import launch
 
 
 def __dir__():
