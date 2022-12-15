@@ -19,7 +19,7 @@ import traceback
 
 from .event import Event, Parsed
 from .handler import Handler, Command, scan
-from .object import Default, last, spl, update
+from .object import Default, Wd, last, spl, update
 from .thread import launch
 
 
@@ -37,7 +37,8 @@ def __dir__():
             "parse",
             "print_exc",
             "setcompleter",
-            "Scandir",
+            "scandir",
+            "scanpkg",
             "wait",
             "wrap"
            )
@@ -111,8 +112,8 @@ def boot(txt):
         Cfg.verbose = True
     if "w" in Cfg.opts:
         Cfg.wait = True
-    if "x" in Cfg.opts:
-        Cfg.exec = True
+    if Cfg.sets.mods:
+        scandir(Wd.moddir(), importer, Cfg.sets.mods)
 
 
 def command(cli, txt, event=None):
@@ -146,20 +147,22 @@ def include(name, namelist):
     return False
 
 
-def importer(pname, mname, path=None):
-    if not path:
-        path = pname
-    mod = None
+def doimport(pname, mname, path=None):
     spec = importlib.util.spec_from_file_location(mname, path)
     if spec:
         mod = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(mod)
-        scan(mod)
+        return mod
+
+
+def importer(pname, mname, path=None):
+    mod = doimport(pname, mname, path)
+    scan(mod)
     return mod
 
 
 def initer(pname, mname, path=None):
-    mod = importer(pname, mname, path)
+    mod = doimport(pname, mname, path)
     if "init" in dir(mod):
         launch(mod.init)
     return mod
@@ -186,7 +189,7 @@ def print_exc(ex):
     traceback.print_exception(type(ex), ex, ex.__traceback__)
 
 
-def scandir(path, func, mods=None):
+def scandir(path, func, mods=None, pname="modz"):
     res = []
     if not os.path.exists(path):
         return res
@@ -195,14 +198,16 @@ def scandir(path, func, mods=None):
            continue
         if fnm.endswith("~") or fnm.startswith("__"):
             continue
-        try:
-            pname = fnm.split(os.sep)[-2]
-        except IndexError:
-            pname = path
         mname = fnm.split(os.sep)[-1][:-3]
         path2 = os.path.join(path, fnm)
         res.append(func(pname, mname, path2))
     return res
+
+
+def scanpkg(pkgname, func, mods=None):
+    pkg = __import__(pkgname)
+    print(pkg.__path__)
+    return scandir(pkg.__path__[0], func, mods)
 
 
 def setcompleter(optionlist):

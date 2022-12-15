@@ -39,11 +39,10 @@ setup(
     long_description=read(),
     long_description_content_type="text/x-rst",
     license="Public Domain",
-    packages=["cmdz", "modz"],
+    packages=["cmdz"],
     include_package_data=True,
     data_files=[
-                ("cmdz/mod", uploadlist("modz")),
-                ("share/cmdz", uploadlist("extra")),
+                ("cmdz/modz", uploadlist("modz")),
                 ("share/doc/cmdz", ("README.rst",))
                ],
     scripts=["bin/cmdz"],

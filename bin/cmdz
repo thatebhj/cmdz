@@ -13,18 +13,15 @@ import sys
 sys.path.insert(0, os.getcwd())
 
 
-from cmdz import Cfg, CLI, Wd, boot, command, importer, scandir, wrap
+from cmdz import Cfg, CLI, Wd, boot, command, importer, initer, scandir, wrap
 
 
+Cfg.name = "cmdz"
 Wd.workdir = os.path.expanduser("~/.cmdz")
 
 
 def main():
     boot(" ".join(sys.argv[1:]))
-    if os.path.exists("mod"):
-        scandir("mod", importer)
-    else:
-        scandir(Wd.moddir(), importer)
     cli = CLI()
     command(cli, Cfg.otxt)
 

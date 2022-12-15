@@ -34,9 +34,9 @@ reading type from the object.
 
 **CONFIGURATION**
 
-``cmdz`` looks for it's modules in ~/.cmdz/mod. A collection of sample modules 
-can be found in /usr/local/cmdz/mod. Copy what modules you want to ~/.cmdz/mod,
-or write your own modules and put them in ~/.cmdz/mod. 
+``cmdz`` looks for it's modules in ~/.cmdz/modz. A collection of sample modules 
+can be found in /usr/local/cmdz/modz. Copy what modules you want to
+~/.cmdz/modz, or write your own modules and put them in ~/.cmdz/modz. 
 
 
 **PROGRAMMING**
