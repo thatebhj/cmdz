@@ -112,8 +112,6 @@ def boot(txt):
         Cfg.verbose = True
     if "w" in Cfg.opts:
         Cfg.wait = True
-    if Cfg.sets.mods:
-        scandir(Wd.moddir(), importer, Cfg.sets.mods)
 
 
 def command(cli, txt, event=None):
@@ -153,6 +151,7 @@ def doimport(pname, mname, path=None):
         mod = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(mod)
         return mod
+    return None
 
 
 def importer(pname, mname, path=None):
@@ -195,7 +194,7 @@ def scandir(path, func, mods=None, pname="modz"):
         return res
     for fnm in os.listdir(path):
         if mods and not include(fnm, spl(mods)):
-           continue
+            continue
         if fnm.endswith("~") or fnm.startswith("__"):
             continue
         mname = fnm.split(os.sep)[-1][:-3]

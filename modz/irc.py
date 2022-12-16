@@ -18,7 +18,7 @@ import threading
 import _thread
 
 
-from cmdz import Class, Handler, Command, Default, Event, Object
+from cmdz import Cfg, Class, Handler, Command, Default, Event, Object
 from cmdz import edit, fntime, find, keys, last, printable, save, update
 from cmdz import elapsed, launch, locked, register
 
@@ -27,7 +27,7 @@ def __dir__():
     return (
             'Config',
             'IRC',
-            'cfg',
+            'icfg',
             'dlt',
             'init',
             'met',
@@ -39,7 +39,7 @@ def __dir__():
 __all__ = __dir__()
 
 
-NAME = "cmdz"
+NAME = Cfg.name or "cmdz"
 REALNAME = "program your own commands"
 
 
@@ -599,7 +599,7 @@ class User(Object):
             update(self, val)
 
 
-def cfg(event):
+def icfg(event):
     config = Config()
     last(config)
     if not event.sets:
