@@ -11,6 +11,7 @@ def cfg(event):
                               Cfg,
                               keys(Cfg),
                              )
+                   )
     else:
         edit(Cfg, event.sets)
         write(Cfg)
