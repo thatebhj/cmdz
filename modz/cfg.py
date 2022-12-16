@@ -1,7 +1,7 @@
 # This file is placed in the Public Domain
 
 
-from cmdz import Cfg, last, printable, keys, save, edit
+from cmdz import Cfg, last, printable, keys, edit, write
 
 
 def cfg(event):
@@ -10,9 +10,8 @@ def cfg(event):
         event.reply(printable(
                               Cfg,
                               keys(Cfg),
-                              skip="control,password,realname,sleep,username")
                              )
     else:
         edit(Cfg, event.sets)
-        save(Cfg)
+        write(Cfg)
         event.done()

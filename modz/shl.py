@@ -9,13 +9,11 @@ import time
 
 
 from cmdz import Cfg, Command, Console, Wd, printable, setcompleter
-from cmdz import scandir, initer
 
 
 def shl(event):
     setcompleter(Command.cmd)
     date = time.ctime(time.time()).replace("  ", " ")
     print("%s started at %s %s" % (Cfg.name.upper(), date, printable(Cfg, "console,debug,verbose,wait", plain=True)))
-    scandir(Wd.moddir(), initer)
     cli = Console()
     cli.start()
