@@ -13,14 +13,14 @@ SKIP = ["env"]
 
 def loop(path, txt):
     for fnn in os.listdir(path):
-        if not os.path.isdir(fnn):
-            continue
         if fnn in SKIP:
             continue
-        os.chdir(fnn)
-        popen(txt)
-        os.chdir("..")
-
+        ppath = os.path.abspath(os.path.join(path, fnn))
+        if os.path.isdir(ppath):
+            loop(ppath, txt)
+            os.chdir(ppath)
+            popen(txt)
+            os.chdir("..")
 
 def popen(txt):
     for line in os.popen(txt).readlines():

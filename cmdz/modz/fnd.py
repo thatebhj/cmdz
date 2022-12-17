@@ -8,7 +8,8 @@
 import time
 
 
-from cmdz import Wd, elapsed, find, fntime, keys, printable
+from cmdz.object import Wd, find, fntime, keys, printable
+from cmdz.thread import elapsed
 
 
 def __dir__():

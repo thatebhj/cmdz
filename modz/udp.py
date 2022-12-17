@@ -9,7 +9,9 @@ import socket
 import time
 
 
-from cmdz import Bus, Class, Object, last, launch
+from cmdz.bus import Bus
+from cmdz.object import Class, Object,last
+from cmdz.thread import launch
 
 
 def __dir__():

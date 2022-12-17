@@ -25,6 +25,7 @@ from .thread import launch
 
 def __dir__():
     return (
+            "Bus",
             "Cfg",
             "Console",
             "boot",
@@ -36,13 +37,40 @@ def __dir__():
            )
 
 
+class Bus(Object):
+
+    objs = []
+
+    @staticmethod
+    def add(obj):
+        if repr(obj) not in [repr(x) for x in Bus.objs]:
+            Bus.objs.append(obj)
+
+    @staticmethod
+    def announce(txt):
+        for obj in Bus.objs:
+            obj.announce(txt)
+
+    @staticmethod
+    def byorig(orig):
+        res = None
+        for obj in Bus.objs:
+            if repr(obj) == orig:
+                res = obj
+                break
+        return res
+
+    @staticmethod
+    def say(orig, channel, txt):
+        bot = Bus.byorig(orig)
+        if bot:
+            bot.say(channel, txt)
+
+
 class Config(Default):
 
     pass
 
-
-Cfg = Config()
-Cfg.prs = Parsed()
 
 def boot():
     prs = parse()
@@ -54,6 +82,7 @@ def boot():
         Cfg.verbose = True
     if "w" in prs.opts:
         Cfg.wait = True
+    update(Cfg.prs, prs)
     update(Cfg, prs.sets)
 
 
@@ -110,3 +139,10 @@ def scandir(path, importer, pname, mods=None):
 def wait():
     while 1:
         time.sleep(1.0)
+
+
+## runtime
+
+
+Cfg = Config()
+Cfg.prs = Parsed()

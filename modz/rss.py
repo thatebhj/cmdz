@@ -18,9 +18,11 @@ from urllib.parse import quote_plus, urlencode
 from urllib.request import Request, urlopen
 
 
-from cmdz import Bus, Cfg, Class, Db, Default, Object, Repeater
-from cmdz import find, fntime, last, printable, save, write
-from cmdz import edit, elapsed, launch, locked, register, spl, update
+from cmdz.bus import Bus
+from cmdz.object import Class, Default, Object, Db, find, fntime, last, printable
+from cmdz.object import register,  save, spl, update
+from cmdz.object import locked, write
+from cmdz.thread import Repeater, elapsed, launch 
 
 
 def __dir__():

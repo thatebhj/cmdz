@@ -9,6 +9,7 @@
 import importlib
 import importlib.util
 import os
+import readline
 import sys
 import termios
 import traceback
@@ -17,9 +18,10 @@ import traceback
 sys.path.insert(0, os.getcwd())
 
 
-from cmdz.object import Wd, last
+from cmdz.objects import Wd, last, save
 from cmdz.handler import Command, Handler
-from cmdz.run import Cfg, boot, command, scanner, scandir
+from cmdz.running import Cfg, boot, command, scanner, scandir
+from cmdz.threads import launch
 
 
 import cmdz.modz
@@ -41,12 +43,29 @@ class CLI(Handler):
         sys.stdout.flush()
 
 
+def daemon():
+    pid = os.fork()
+    if pid != 0:
+        os._exit(0)
+    os.setsid()
+    os.umask(0)
+    sis = open("/dev/null", 'r')
+    os.dup2(sis.fileno(), sys.stdin.fileno())
+    if not Cfg.verbose:
+        sos = open("/dev/null", 'a+')
+        ses = open("/dev/null", 'a+')
+        os.dup2(sos.fileno(), sys.stdout.fileno())
+        os.dup2(ses.fileno(), sys.stderr.fileno())
+
+
 def importer(mname, path):
     spec = importlib.util.find_spec(mname)
     if spec:
         mod = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(mod)
         return mod
+    if "init" in dir(mod):
+        lauch(mod.init)
     return None
 
 
@@ -80,9 +99,8 @@ def wrap(func):
 
 
 def main():
-    last(Cfg)
     boot()
-    scanner(cmdz.modz, importer, Cfg.mods)
+    scanner(cmdz.modz, importer)
     scandir(Wd.moddir(), importer, "modz", Cfg.mods)
     cli = CLI()
     command(cli, Cfg.prs.otxt)
