@@ -68,7 +68,6 @@ basic usage is this::
 >>> 'value'
 
 |
-|
 
 Objects try to mimic a dictionary while trying to be an object with normal
 attribute access as well. hidden methods are provided, the methods are
@@ -86,7 +85,6 @@ load/save from/to disk::
 >>> obj.key
 >>> 'value'
 
-|
 |
 
 big Objects can be searched with database functions and uses read-only files
