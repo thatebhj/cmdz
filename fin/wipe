@@ -5,19 +5,16 @@
 "wipe"
 
 
-## import
-
-
 import os
-
-
-## utility
+import sys
 
 
 def popen(txt):
-    "run command"
+    result = ""
     for line in os.popen(txt).readlines():
-        print(line.strip())
+        result += line.rstrip() + " "
+    print(result.rstrip())
+    sys.stdout.flush()
 
 
 ## runtime
@@ -25,3 +22,4 @@ def popen(txt):
 
 popen("fin/clean")
 popen("rm -fR env")
+

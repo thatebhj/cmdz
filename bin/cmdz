@@ -6,24 +6,85 @@
 "write your own commands"
 
 
+import importlib
+import importlib.util
 import os
 import sys
+import termios
+import traceback
 
 
 sys.path.insert(0, os.getcwd())
 
 
-from cmdz import Cfg, CLI, Wd, boot, command, importer, initer, scandir, wrap
+from cmdz.object import Wd, last
+from cmdz.handler import Command, Handler
+from cmdz.run import Cfg, boot, command, scanner, scandir
+
+
+import cmdz.modz
 
 
 Cfg.name = "cmdz"
 Wd.workdir = os.path.expanduser("~/.cmdz")
 
 
+class CLI(Handler):
+
+    @staticmethod
+    def announce(txt):
+        pass
+
+    @staticmethod
+    def raw(txt):
+        print(txt)
+        sys.stdout.flush()
+
+
+def importer(mname, path):
+    spec = importlib.util.find_spec(mname)
+    if spec:
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        return mod
+    return None
+
+
+def print_exc(ex):
+    traceback.print_exception(type(ex), ex, ex.__traceback__)
+
+
+def setcompleter(optionlist):
+    completer = Completer(optionlist)
+    readline.set_completer(completer.complete)
+    readline.parse_and_bind("tab: complete")
+    atexit.register(lambda: readline.set_completer(None))
+
+
+def wrap(func):
+    fds = sys.stdin.fileno()
+    gotterm = True
+    try:
+        old = termios.tcgetattr(fds)
+    except termios.error:
+        gotterm = False
+    try:
+        func()
+    except (EOFError, KeyboardInterrupt):
+        print("")
+    finally:
+        if gotterm:
+            termios.tcsetattr(fds, termios.TCSADRAIN, old)
+        for evt in Command.errors:
+            print_exc(evt.__exc__)
+
+
 def main():
-    boot(" ".join(sys.argv[1:]))
-    scandir("modz", importer, Cfg.sets.mods or Cfg.mods or "cmds")
-    scandir("modz", initer, Cfg.sets.mods or Cfg.mods or "cmds")
+    last(Cfg)
+    boot()
+    mods = Cfg.sets.mods or Cfg.mods or "cmds"
+    scanner(cmdz.modz, importer, mods)
+    scandir(Wd.moddir(), importer, "modz", mods)
     cli = CLI()
     command(cli, Cfg.txt)
 
