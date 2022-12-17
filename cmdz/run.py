@@ -1,5 +1,5 @@
 # This file is placed in the Public Domain.
-# pylint: disable=C0115,C0116,C0411,C0413,W0212,R0903,W0201,E0402
+# pylint: disable=C0115,C0116,C0411,C0413,W0212,R0903,W0201,E0402,W0613
 
 
 "runtime"
@@ -19,7 +19,7 @@ import traceback
 
 from .event import Event, Parsed
 from .handler import Handler, Command, scan
-from .object import Default, Wd, last, spl, update
+from .object import Default, last, spl, update
 from .thread import launch
 
 

@@ -21,11 +21,11 @@ README
 **DESCRIPTION**
 
 
-With ``cmdz`` your can have the commands of a irc bot available on your cli.
+With ``CMDZ`` your can have the commands of a irc bot available on your cli.
 Instead of having to join a irc channel and give commands to your bot, you
 can run these commands on your shell.
 
-``cmdz`` stores it's data on disk where objects are time versioned and the
+``CMDZ`` stores it's data on disk where objects are time versioned and the
 last version saved on disk is served to the user layer. Files are JSON dumps
 that are read-only so thus should provide (disk) persistence. Paths carry the
 type in the path name what makes reconstruction from filename easier then
@@ -34,7 +34,7 @@ reading type from the object.
 
 **CONFIGURATION**
 
-``cmdz`` looks for it's modules in ~/.cmdz/modz. A collection of sample modules 
+``CMDZ`` looks for it's modules in ~/.cmdz/modz. A collection of sample modules 
 can be found in /usr/local/cmdz/modz. Copy what modules you want to
 ~/.cmdz/modz, or write your own modules and put them in ~/.cmdz/modz. 
 
@@ -77,7 +77,7 @@ great for giving objects peristence by having their state stored in files::
 >>> from cmdz import Object, save
 >>> o = Object()
 >>> save(o)
->>> 'cmdz.Object/c13c5369-8ada-44a9-80b3-4641986f09df/2021-08-31/15:31:05.717063'
+'cmdz.object.Object/c13c5369-8ada-44a9-80b3-4641986f09df/2021-08-31/15:31:05.717063'
 
 
 **AUTHOR**

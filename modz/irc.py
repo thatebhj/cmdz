@@ -70,7 +70,7 @@ class Config(Default):
     servermodes = ""
     sleep = 60
     username = "%s" % NAME
-    users = False
+    users = True
 
     def __init__(self):
         super().__init__()
@@ -575,7 +575,7 @@ class Users(Object):
         users = list(Users.get_users(origin))
         res = None
         if len(users) > 0:
-            res = users[-1][-1]
+            res = users[-1]
         return res
 
     @staticmethod
