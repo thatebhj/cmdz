@@ -17,15 +17,14 @@ import time
 import traceback
 
 
-from .event import Event, Parsed
+from .message import Event, Parsed
 from .handler import Handler, Command, scan
-from .object import Default, Object, last, spl, update
-from .thread import launch
+from .objects import Default, Object, last, spl, update
+from .threads import launch
 
 
 def __dir__():
     return (
-            "Bus",
             "Cfg",
             "Console",
             "boot",
@@ -35,36 +34,6 @@ def __dir__():
             'scandir',
             "wait"
            )
-
-
-class Bus(Object):
-
-    objs = []
-
-    @staticmethod
-    def add(obj):
-        if repr(obj) not in [repr(x) for x in Bus.objs]:
-            Bus.objs.append(obj)
-
-    @staticmethod
-    def announce(txt):
-        for obj in Bus.objs:
-            obj.announce(txt)
-
-    @staticmethod
-    def byorig(orig):
-        res = None
-        for obj in Bus.objs:
-            if repr(obj) == orig:
-                res = obj
-                break
-        return res
-
-    @staticmethod
-    def say(orig, channel, txt):
-        bot = Bus.byorig(orig)
-        if bot:
-            bot.say(channel, txt)
 
 
 class Config(Default):

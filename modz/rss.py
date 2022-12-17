@@ -18,11 +18,11 @@ from urllib.parse import quote_plus, urlencode
 from urllib.request import Request, urlopen
 
 
-from cmdz.bus import Bus
-from cmdz.object import Class, Default, Object, Db, find, fntime, last, printable
-from cmdz.object import register,  save, spl, update
-from cmdz.object import locked, write
-from cmdz.thread import Repeater, elapsed, launch 
+from cmdz.handler import Bus
+from cmdz.objects import Class, Default, Object, Db, find, fntime, last, printable
+from cmdz.objects import register,  save, spl, update
+from cmdz.objects import locked, write
+from cmdz.threads import Repeater, elapsed, launch 
 
 
 def __dir__():
@@ -33,10 +33,10 @@ def __dir__():
         "Seen",
         "debug",
         "init",
-        "dpl",
-        "ftc",
-        "nme",
-        "rem",
+        "display",
+        "fetch",
+        "name",
+        "remove",
         "rss"
     )
 
@@ -231,7 +231,7 @@ def useragent(txt):
     return "Mozilla/5.0 (X11; Linux x86_64) " + txt
 
 
-def dpl(event):
+def display(event):
     if len(event.args) < 2:
         event.reply("dpl <stringinurl> <item1,item2>")
         return
@@ -245,7 +245,7 @@ def dpl(event):
             event.done()
 
 
-def ftc(event):
+def fetch(event):
     res = []
     thrs = []
     fetcher = Fetcher()
@@ -258,9 +258,9 @@ def ftc(event):
         return
 
 
-def nme(event):
+def name(event):
     if len(event.args) != 2:
-        event.reply("nme <stringinurl> <name>")
+        event.reply("name <stringinurl> <name>")
         return
     selector = {"rss": event.args[0]}
     got = []
@@ -272,7 +272,7 @@ def nme(event):
     event.done()
 
 
-def rem(event):
+def remove(event):
     if len(event.args) != 1:
         event.reply("rem <stringinurl>")
         return

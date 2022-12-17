@@ -10,18 +10,18 @@ import unittest
 import _thread
 
 
-import cmdz.object
+import cmdz.objects
 
 
-from cmdz.object import *
+from cmdz.objects import *
 from cmdz.handler import *
-from cmdz.thread import *
+from cmdz.threads import *
 
 
 Wd.workdir = ".test"
 
 
-FN = "cmdz.object.Object/1dd93ecc467d467c98092239055e926c/2022-04-11/22:40:31.259218"
+FN = "cmdz.objects.Object/1dd93ecc467d467c98092239055e926c/2022-04-11/22:40:31.259218"
 VALIDJSON = '{"test": "bla"}'
 
 
@@ -102,13 +102,13 @@ class TestObject(unittest.TestCase):
     #    save(obj)
 
     def test_match(self):
-        mtc = match("cmdz.object.Object", {"txt": "test"})
+        mtc = match("cmdz.objects.Object", {"txt": "test"})
         self.assertTrue(not mtc)
 
     def test_find(self):
         objs = find("object")
         if objs:
-            self.assertTrue("cmdz.object.Object" in repr(objs[0]))
+            self.assertTrue("cmdz.objects.Object" in repr(objs[0]))
         self.assertTrue(True)
 
     def test_default(self):
@@ -130,7 +130,7 @@ class TestObject(unittest.TestCase):
         self.assertEqual(jsn, '{"bla": "mekker"}')
 
     def test_interface(self):
-        self.assertTrue(dir(cmdz.object), attrs1)
+        self.assertTrue(dir(cmdz.objects), attrs1)
 
     def test_constructor(self):
         obj = Object()
@@ -199,7 +199,7 @@ class TestObject(unittest.TestCase):
 
     def test_kind(self):
         obj = Object()
-        self.assertEqual(kind(obj), "cmdz.object.Object")
+        self.assertEqual(kind(obj), "cmdz.objects.Object")
 
     def test_repr(self):
         self.assertTrue(update(Object(),
@@ -308,9 +308,9 @@ class TestDb(unittest.TestCase):
     def test_fns(self):
         obj = Object()
         save(obj)
-        fnms = fns("cmdz.object.Object")
+        fnms = fns("cmdz.objects.Object")
         if fnms:
-            self.assertTrue("cmdz.object.Object"  in fnms[0])
+            self.assertTrue("cmdz.objects.Object"  in fnms[0])
         self.assertTrue(True)
 
     def test_hook(self):

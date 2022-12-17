@@ -4,11 +4,17 @@
 "config"
 
 
-from cmdz.object import last, printable, keys, edit, write
-from cmdz.run import Cfg
+from cmdz.objects import last, printable, keys, edit, write
+from cmdz.running import Cfg
 
 
-def cfg(event):
+def __dir__():
+    return (
+            "config",
+           ) 
+
+
+def config(event):
     last(Cfg)
     if not event.sets:
         event.reply(printable(

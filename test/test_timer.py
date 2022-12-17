@@ -8,7 +8,7 @@
 import unittest
 
 
-from cmdz.thread import Timer
+from cmdz.threads import Timer
 
 
 def test():

@@ -8,16 +8,16 @@
 import time
 
 
-from cmdz.object import Wd, find, fntime, keys, printable
-from cmdz.thread import elapsed
+from cmdz.objects import Wd, find, fntime, keys, printable
+from cmdz.threads import elapsed
 
 
 def __dir__():
     return (
-            "fnd",
+            "find",
            )
 
-def fnd(event):
+def find(event):
     if not event.args:
         res = ",".join(sorted([x.split(".")[-1].lower() for x in Wd.types()]))
         if res:

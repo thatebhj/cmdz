@@ -20,7 +20,7 @@ sys.path.insert(0, os.getcwd())
 
 from cmdz.objects import Wd, last, save
 from cmdz.handler import Command, Handler
-from cmdz.running import Cfg, boot, command, scanner, scandir
+from cmdz.running import Cfg, boot, command, scanner, scandir, wait
 from cmdz.threads import launch
 
 
@@ -63,9 +63,9 @@ def importer(mname, path):
     if spec:
         mod = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(mod)
+        if "init" in dir(mod):
+            launch(mod.init)
         return mod
-    if "init" in dir(mod):
-        lauch(mod.init)
     return None
 
 

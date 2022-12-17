@@ -10,16 +10,16 @@ import os
 import time
 
 
-from cmdz.object import Class, Object, find, fntime, printable, save
-from cmdz.thread import elapsed
+from cmdz.objects import Class, Object, find, fntime, printable, save
+from cmdz.threads import elapsed
 
 
 def __dir__():
     return (
             "Email",
-            "cor",
-            "eml",
-            "mbx"
+            "correspondence",
+            "email",
+            "mailbox"
            )
 
 
@@ -102,7 +102,7 @@ def to_date(date):
     return ddd
 
 
-def cor(event):
+def correspondence(event):
     if not event.args:
         event.reply("cor <email>")
         return
@@ -121,7 +121,7 @@ def cor(event):
                                  )
 
 
-def eml(event):
+def email(event):
     if not event.args:
         event.reply("eml <searchtxtinemail>")
         return
@@ -136,7 +136,7 @@ def eml(event):
                                      )
 
 
-def mbx(event):
+def mailbox(event):
     if not event.args:
         event.reply("mbx <directory>")
         return

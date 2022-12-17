@@ -18,24 +18,24 @@ import threading
 import _thread
 
 
-from cmdz.event import Event
+from cmdz.message import Event
 from cmdz.handler import Command, Handler
-from cmdz.object import Class, Default, Object
-from cmdz.object import edit, fntime, find, keys, last, locked, printable
-from cmdz.object import register, save, update
-from cmdz.run import Cfg
-from cmdz.thread import elapsed, launch
+from cmdz.objects import Class, Default, Object
+from cmdz.objects import edit, fntime, find, keys, last, locked, printable
+from cmdz.objects import register, save, update
+from cmdz.running import Cfg
+from cmdz.threads import elapsed, launch
 
 
 def __dir__():
     return (
             'Config',
             'IRC',
-            'icfg',
-            'dlt',
+            'cfg',
+            'delete',
             'init',
-            'met',
-            'mre',
+            'meet',
+            'more',
             'pwd'
            )
 
@@ -603,7 +603,7 @@ class User(Object):
             update(self, val)
 
 
-def icfg(event):
+def cfg(event):
     config = Config()
     last(config)
     if not event.sets:
@@ -618,7 +618,7 @@ def icfg(event):
         event.done()
 
 
-def dlt(event):
+def delete(event):
     if not event.args:
         event.reply("dlt <username>")
         return
@@ -630,7 +630,7 @@ def dlt(event):
         break
 
 
-def met(event):
+def meet(event):
     if not event.rest:
         nmr = 0
         for obj in find("user"):
@@ -649,7 +649,7 @@ def met(event):
     event.done()
 
 
-def mre(event):
+def more(event):
     if not event.channel:
         event.reply("channel is not set.")
         return

@@ -9,23 +9,23 @@ import threading
 import time
 
 
-from cmdz.bus import Bus
-from cmdz.object import Object, update
-from cmdz.thread import elapsed, name
+from cmdz.objects import Object, update
+from cmdz.handler import Bus
+from cmdz.threads import elapsed, name
 
 
 def __dir__():
     return (
-            'flt',
-            'thr',
-            'upt'
+            'fleet',
+            'threads',
+            'uptime'
            )
 
 
 starttime = time.time()
 
 
-def flt(event):
+def fleet(event):
     try:
         index = int(event.args[0])
         event.reply(Bus.objs[index])
@@ -35,7 +35,7 @@ def flt(event):
     event.reply(" | ".join([name(o) for o in Bus.objs]))
 
 
-def thr(event):
+def threads(event):
     result = []
     for thread in sorted(threading.enumerate(), key=lambda x: x.getName()):
         if str(thread).startswith("<_"):
@@ -56,5 +56,5 @@ def thr(event):
         event.reply("no threads running")
 
 
-def upt(event):
+def uptime(event):
     event.reply(elapsed(time.time()-starttime))

@@ -12,10 +12,17 @@ import sys
 import time
 
 
-from cmdz.event import Event
+from cmdz.message import Event
 from cmdz.handler import Command, Handler
-from cmdz.object import Wd, printable
-from cmdz.run import Cfg
+from cmdz.objects import Wd, printable
+from cmdz.running import Cfg
+
+
+def __dir__():
+    return (
+            "Console",
+            "shell"
+           )
 
 
 class Console(Handler):
@@ -70,7 +77,7 @@ def setcompleter(optionlist):
     atexit.register(lambda: readline.set_completer(None))
 
 
-def shl(event):
+def shell(event):
     setcompleter(Command.cmd)
     date = time.ctime(time.time()).replace("  ", " ")
     print("%s started at %s %s" % (Cfg.name.upper(), date, printable(Cfg, "console,debug,verbose,wait", plain=True)))

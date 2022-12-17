@@ -8,7 +8,7 @@
 import unittest
 
 
-from cmdz.thread import Thread
+from cmdz.threads import Thread
 
 
 def test():
