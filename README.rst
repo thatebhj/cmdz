@@ -7,17 +7,20 @@ README
 |
 | ``CMDZ`` - program your own commands
 |
+|
 
 **SYNOPSIS**
 
 |
 | ``cmdz <cmd> [key=val] [key==val]``
 |
+|
 
 **INSTALL**
 
 |
 | ``pip3 install cmdz``
+|
 |
 
 **DESCRIPTION**
