@@ -4,22 +4,25 @@ README
 
 **NAME**
 
+|
 | ``CMDZ`` - program your own commands
 |
 
 **SYNOPSIS**
 
-
+|
 | ``cmdz <cmd> [key=val] [key==val]``
 |
 
 **INSTALL**
 
+|
 | ``pip3 install cmdz``
 |
 
 **DESCRIPTION**
 
+|
 
 With ``CMDZ`` your can have the commands of a irc bot available on your cli.
 Instead of having to join a irc channel and give commands to your bot, you
@@ -35,6 +38,8 @@ reading type from the object.
 
 **CONFIGURATION**
 
+|
+
 ``CMDZ`` looks for it's modules in ~/.cmdz/modz. A collection of sample modules 
 can be found in /usr/local/cmdz/modz. Copy what modules you want to
 ~/.cmdz/modz, or write your own modules and put them in ~/.cmdz/modz. 
@@ -43,6 +48,7 @@ can be found in /usr/local/cmdz/modz. Copy what modules you want to
 
 **PROGRAMMING**
 
+|
 
 The ``cmdz`` package provides an Object class, that mimics a dict while using
 attribute access and provides a save/load to/from json files on disk.
@@ -90,9 +96,8 @@ great for giving objects peristence by having their state stored in files.
 
 **AUTHOR**
 
-
-B.H.J. Thate
-
+|
+| B.H.J. Thate
 |
 
 
