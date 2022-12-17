@@ -72,12 +72,18 @@ load/save from/to disk::
 >>> obj.key
 >>> 'value'
 
-great for giving objects peristence by having their state stored in files::
+
+big Objects can be searched with database functions and uses read-only files
+to improve persistence and a type in filename for reconstruction:
+
+'cmdz.object.Object/11ee5f11bd874f1eaa9005980f9d7a94/2021-08-31/15:31:05.717063'
 
 >>> from cmdz import Object, save
 >>> o = Object()
->>> save(o)
-'cmdz.object.Object/c13c5369-8ada-44a9-80b3-4641986f09df/2021-08-31/15:31:05.717063'
+>>> save(o)  # doctest: +ELLIPSIS
+'cmdz.object.Object/...'
+
+great for giving objects peristence by having their state stored in files.
 
 
 **AUTHOR**
