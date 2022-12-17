@@ -24,9 +24,6 @@ from cmdz.running import Cfg, boot, command, scanner, scandir, wait
 from cmdz.threads import launch
 
 
-import cmdz.modz
-
-
 Cfg.name = "cmdz"
 Wd.workdir = os.path.expanduser("~/.cmdz")
 
@@ -100,7 +97,6 @@ def wrap(func):
 
 def main():
     boot()
-    scanner(cmdz.modz, importer)
     scandir(Wd.moddir(), importer, "modz", Cfg.mods)
     cli = CLI()
     command(cli, Cfg.prs.otxt)
