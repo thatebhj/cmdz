@@ -4,19 +4,19 @@ README
 
 **NAME**
 
-``CMDZ`` - program your own commands
-
+| ``CMDZ`` - program your own commands
+|
 
 **SYNOPSIS**
 
 
-``cmdz <cmd> [key=val] [key==val]``
-
+| ``cmdz <cmd> [key=val] [key==val]``
+|
 
 **INSTALL**
 
-``pip3 install cmdz``
-
+| ``pip3 install cmdz``
+|
 
 **DESCRIPTION**
 
@@ -31,6 +31,7 @@ that are read-only so thus should provide (disk) persistence. Paths carry the
 type in the path name what makes reconstruction from filename easier then
 reading type from the object.
 
+|
 
 **CONFIGURATION**
 
@@ -38,6 +39,7 @@ reading type from the object.
 can be found in /usr/local/cmdz/modz. Copy what modules you want to
 ~/.cmdz/modz, or write your own modules and put them in ~/.cmdz/modz. 
 
+|
 
 **PROGRAMMING**
 
@@ -72,7 +74,6 @@ load/save from/to disk::
 >>> obj.key
 >>> 'value'
 
-
 big Objects can be searched with database functions and uses read-only files
 to improve persistence and a type in filename for reconstruction:
 
@@ -85,11 +86,14 @@ to improve persistence and a type in filename for reconstruction:
 
 great for giving objects peristence by having their state stored in files.
 
+|
 
 **AUTHOR**
 
 
 B.H.J. Thate
+
+|
 
 
 **COPYRIGHT**
