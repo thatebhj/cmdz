@@ -1,7 +1,11 @@
 # This file is placed in the Public Domain
 
 
-from cmdz import Cfg, last, printable, keys, edit, write
+"config"
+
+
+from cmdz.object import last, printable, keys, edit, write
+from cmdz.run import Cfg
 
 
 def cfg(event):

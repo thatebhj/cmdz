@@ -42,18 +42,19 @@ class Config(Default):
 
 
 Cfg = Config()
-
+Cfg.prs = Parsed()
 
 def boot():
-    parse()
-    if "c" in Cfg.opts:
+    prs = parse()
+    if "c" in prs.opts:
         Cfg.console = True
-    if "d" in Cfg.opts:
+    if "d" in prs.opts:
         Cfg.daemon= True
-    if "v" in Cfg.opts:
+    if "v" in prs.opts:
         Cfg.verbose = True
-    if "w" in Cfg.opts:
+    if "w" in prs.opts:
         Cfg.wait = True
+    update(Cfg, prs.sets)
 
 
 def command(cli, txt, event=None):
@@ -87,17 +88,7 @@ def parse(txt=None):
         txt = " ".join(sys.argv[1:])
     prs = Parsed()
     prs.parse(txt)
-    if "c" in prs.opts:
-        prs.console = True
-    if "d" in prs.opts:
-        prs.debug = True
-    if "v" in prs.opts:
-        prs.verbose = True
-    if "x" in prs.opts:
-        prs.exec = True
-    if "w" in prs.opts:
-        prs.wait = True
-    update(Cfg, prs)
+    update(Cfg.prs, prs)
     return prs
 
 

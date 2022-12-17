@@ -82,11 +82,10 @@ def wrap(func):
 def main():
     last(Cfg)
     boot()
-    mods = Cfg.sets.mods or Cfg.mods or "cmds"
-    scanner(cmdz.modz, importer, mods)
-    scandir(Wd.moddir(), importer, "modz", mods)
+    scanner(cmdz.modz, importer, Cfg.mods)
+    scandir(Wd.moddir(), importer, "modz", Cfg.mods)
     cli = CLI()
-    command(cli, Cfg.txt)
+    command(cli, Cfg.prs.otxt)
 
 
 wrap(main)
