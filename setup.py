@@ -19,19 +19,20 @@ def uploadlist(dir):
     for file in os.listdir(dir):
         if not file or file.startswith('.'):
             continue
+        if file.endswith(".pyc") or file.startswith("__pycache"):
+            continue
+        print(file)
         d = dir + os.sep + file
-        if os.path.isdir(d):   
-            upl.extend(uploadlist(d))
-        else:
-            if file.endswith(".pyc") or file.startswith("__pycache"):
-                continue
+        if not os.path.isdir(d):
             upl.append(d)
+        else:
+            upl.extend(uploadlist(d))
     return upl
 
 
 setup(
     name="cmdz",
-    version="4",
+    version="5",
     author="B.H.J. Thate",
     author_email="thatebhj@gmail.com",
     url="http://github.com/thatebhj/cmdz",
@@ -39,10 +40,10 @@ setup(
     long_description=read(),
     long_description_content_type="text/x-rst",
     license="Public Domain",
-    packages=["cmdz", 'cmdz.modz'],
+    packages=["cmdz", "modz"],
     include_package_data=True,
     data_files=[
-                ("cmdz/modz", uploadlist("cmdz/modz")),
+                ("cmdz/modz", uploadlist("modz")),
                 ("share/doc/cmdz", ("README.rst",))
                ],
     scripts=["bin/cmdz"],

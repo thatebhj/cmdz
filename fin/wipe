@@ -12,7 +12,7 @@ import sys
 def popen(txt):
     result = ""
     for line in os.popen(txt).readlines():
-        result += line.rstrip() + " "
+        result += line.rstrip() + "\n"
     print(result.rstrip())
     sys.stdout.flush()
 

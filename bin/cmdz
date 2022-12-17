@@ -24,6 +24,9 @@ from cmdz.running import Cfg, boot, command, scanner, scandir, wait
 from cmdz.threads import launch
 
 
+import modz
+
+
 Cfg.name = "cmdz"
 Wd.workdir = os.path.expanduser("~/.cmdz")
 
