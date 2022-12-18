@@ -5,7 +5,7 @@ README
 **NAME**
 
 |
-| ``CMDZ`` - program your own commands
+| ``CMDZ`` - program your own commands !
 |
 |
 
