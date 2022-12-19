@@ -26,8 +26,9 @@ sys.path.insert(0, os.getcwd())
 from cmdz.message import Event
 from cmdz.handler import Command, Handler
 from cmdz.objects import Wd, printable
-from cmdz.running import Cfg, scandir, scanner
+from cmdz.running import Cfg, boot, command, scandir, scanner
 from cmdz.threads import launch
+
 
 ## defines
 
@@ -102,6 +103,7 @@ class Completer(rlcompleter.Completer):
 
 ## utiltiy
 
+
 def daemon():
     pid = os.fork()
     if pid != 0:
@@ -115,8 +117,6 @@ def daemon():
         ses = open("/dev/null", 'a+')
         os.dup2(sos.fileno(), sys.stdout.fileno())
         os.dup2(ses.fileno(), sys.stderr.fileno())
-
-
 
 
 def importer(mname, path):
@@ -177,12 +177,7 @@ def disable(event):
     if name == "disable":
         event.reply("i won't disable myself")
         return
-    pkg = importer("cmdz.enable")
-    path = pkg.__path__[0]
-    mod = importer(path, name)
-    if not mod:
-        event.reply("can't find %s (%s)" % path)
-        return
+    path = os.path.join(Wd.moddir(), name + ".py")
     splitted = path.split()
     splitted[-2] = "disable"
     newpath = os.sep.join(splitted)
@@ -198,14 +193,8 @@ def enable(event):
     if name == "enable":
         event.reply("i won't enable myself")
         return
-    pkg = importer("cmdz.disable")
-    path = pkg.__path__[0]
-    mod = importer(path, name)
-    if not mod:
-        event.reply("can't find %s (%s)" % path)
-        return
-    splitted = path.split()
-    splitted[-2] = "enable"
+    path = os.path.join(Wd.disable(), name + ".py")
+    splitted[-2] = "modz"
     newpath = os.sep.join(splitted)
     shutil.move(path, newpath)
     event.ok(newpath)
@@ -215,14 +204,19 @@ def enable(event):
 
 
 def main():
-    setcompleter(Command.cmd)
+    boot()
     Command.add(disable)
     Command.add(enable)
-    date = time.ctime(time.time()).replace("  ", " ")
-    print("%s started at %s %s" % (Cfg.name.upper(), date, printable(Cfg, plain=True)))
     scandir(Wd.moddir(), importer, "modz")
-    cli = Console()
-    cli.start()
-    
+    setcompleter(Command.cmd)
+    if Cfg.prs.txt:
+        cli = CLI()
+        return command(cli, Cfg.prs.otxt)
+    if Cfg.console:
+        date = time.ctime(time.time()).replace("  ", " ")
+        print("%s started at %s %s" % (Cfg.name.upper(), date, printable(Cfg, plain=True)))
+        cli = Console()
+        cli.start()
+     
 
 wrap(main)
