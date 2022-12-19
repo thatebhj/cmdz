@@ -527,6 +527,10 @@ class Wd:
         return os.path.join(Wd.get(), "modz")
 
     @staticmethod
+    def disabled():
+        return os.path.join(Wd.get(), "disable")
+
+    @staticmethod
     def set(path):
         Wd.workdir = path
 
