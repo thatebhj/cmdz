@@ -2,7 +2,7 @@
 # pylint: disable=C0115,C0116,W0703,W0201,R0902,R0903,W0613,R0201,C0103,E0402
 
 
-"event"
+"message"
 
 
 import threading
@@ -96,9 +96,9 @@ class Event(Parsed):
         Bus.say(self.orig, self.channel, f'ok {diff}')
 
     def ok(self, txt=None):
-        text = "ok " + txt or ""
+        text = "ok " + (txt or "")
         text = text.rstrip()
-        Bus.say(self.orig, self.channel, txt)
+        Bus.say(self.orig, self.channel, text)
 
     def ready(self):
         self.__ready__.set()

@@ -102,7 +102,7 @@ def to_date(date):
     return ddd
 
 
-def correspondence(event):
+def cor(event):
     if not event.args:
         event.reply("cor <email>")
         return
@@ -121,7 +121,7 @@ def correspondence(event):
                                  )
 
 
-def email(event):
+def eml(event):
     if not event.args:
         event.reply("eml <searchtxtinemail>")
         return
@@ -136,7 +136,7 @@ def email(event):
                                      )
 
 
-def mailbox(event):
+def mbx(event):
     if not event.args:
         event.reply("mbx <directory>")
         return

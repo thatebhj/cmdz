@@ -21,8 +21,9 @@ from urllib.request import Request, urlopen
 from cmdz.handler import Bus
 from cmdz.objects import Class, Default, Object, Db, find, fntime, last, printable
 from cmdz.objects import register,  save, spl, update
-from cmdz.objects import locked, write
-from cmdz.threads import Repeater, elapsed, launch 
+from cmdz.objects import edit, locked, write
+from cmdz.running import Cfg
+from cmdz.threads import Repeater, elapsed, launch
 
 
 def __dir__():

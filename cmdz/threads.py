@@ -2,7 +2,7 @@
 # pylint: disable=C0112,C0115,C0116,R0902
 
 
-"thread"
+"threads"
 
 
 import queue
@@ -164,5 +164,5 @@ def name(obj):
     if "__class__" in dir(obj):
         return obj.__class__.__name__
     if "__name__" in dir(obj):
-        return obj.__name__
+        return "%s.%s" % (obj.__class__.__name__, obj.__name__)
     return None

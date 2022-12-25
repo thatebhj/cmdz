@@ -5,22 +5,14 @@
 "runtime"
 
 
-import atexit
-import importlib
-import importlib.util
 import os
-import readline
-import rlcompleter
 import sys
-import termios
 import time
-import traceback
 
 
 from .message import Event, Parsed
-from .handler import Handler, Command, scan
-from .objects import Default, Object, last, spl, update
-from .threads import launch
+from .handler import scan
+from .objects import Default, spl, update
 
 
 def __dir__():
@@ -51,6 +43,8 @@ def boot():
         Cfg.verbose = True
     if "w" in prs.opts:
         Cfg.wait = True
+    if "x" in prs.opts:
+        Cfg.exec = True
     update(Cfg.prs, prs)
     update(Cfg, prs.sets)
 
@@ -78,7 +72,8 @@ def listmod(path):
     for fnm in os.listdir(path):
         if fnm.endswith("~") or fnm.startswith("__"):
             continue
-        yield fnm.split(os.sep)[-1][:-3]
+        res.append(fnm.split(os.sep)[-1][:-3])
+    return res
 
 
 def parse(txt=None):
@@ -97,17 +92,23 @@ def scanner(pkg, importer, mods=None):
 
 
 def scandir(path, importer, pname, mods=None):
+    res = []
     for modname in listmod(path):
         if mods and not include(modname, spl(mods)):
             continue
         mname = "%s.%s" % (pname, modname)
-        mod = importer(mname, path)
+        ppath = os.path.join("%s/%s.py" % (path, modname))
+        mod = importer(mname, ppath)
+        res.append(mod)
         scan(mod)
+    return res
 
 
-def wait():
+def wait(func=None):
     while 1:
         time.sleep(1.0)
+        if func:
+            func()
 
 
 ## runtime
