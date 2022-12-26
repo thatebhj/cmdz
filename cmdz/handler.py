@@ -74,9 +74,6 @@ class Callback(Object):
         if not func:
             event.ready()
             return
-        if "perm" in dir(func):
-            if not Users.allowed(event.userhost, func.perm):
-                return
         event.__thr__ = launch(func, event)
 
     def dispatch(self, event):
@@ -104,6 +101,9 @@ class Command(Object):
         if not evt.isparsed:
             evt.parse()
         func = Command.get(evt.cmd)
+        if "perm" in dir(func):
+            if not Users.allowed(evt.userhost, func.perm):
+                return
         if func:
             try:
                 func(evt)

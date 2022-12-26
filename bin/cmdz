@@ -28,7 +28,7 @@ sys.path.insert(0, os.getcwd())
 from cmdz.message import Event
 from cmdz.handler import Command, Handler
 from cmdz.objects import Wd, cdir, edit, find, keys, last, printable, save, write
-from cmdz.objects import fntime
+from cmdz.objects import fntime, match
 from cmdz.running import Cfg, boot, command, scan, scandir, wait
 from cmdz.threads import elapsed, launch
 from cmdz.usersdb import User
@@ -293,7 +293,7 @@ def opr(event):
                                         )
             nmr += 1
         return
-    user = user.match("mod.irc.User", {"user": event.rest})
+    user = match("user", {"user": event.rest})
     if not user:
         user = User()
     user.user = event.rest

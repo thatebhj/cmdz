@@ -8,7 +8,7 @@
 import time
 
 
-from .objects import Class, Object, find, fntime, match, save, update, write
+from .objects import Class, Object, find, fntime, match, save, spl, update, write
 from .threads import elapsed
 
 
@@ -24,6 +24,7 @@ class NoUser(Exception):
 
     pass
 
+
 class Users(Object):
 
     @staticmethod
@@ -31,8 +32,10 @@ class Users(Object):
         perm = perm.upper()
         user = Users.get_user(origin)
         val = False
-        if user and perm in user.perms:
-            val = True
+        if user:
+            for prm in spl(user.perms):
+                if prm == perm:
+                    val = True
         return val
 
     @staticmethod
@@ -48,8 +51,8 @@ class Users(Object):
         return res
 
     @staticmethod
-    def get_users(origin=""):
-        selector = {"user": origin}
+    def get_users(origin="", perm="USER"):
+        selector = {"user": origin, "perm": perm}
         return find("user", selector)
 
     @staticmethod
@@ -96,6 +99,9 @@ def dlt(event):
         break
 
 
+dlt.perm = "OPER"
+
+
 def met(event):
     if not event.rest:
         nmr = 0
@@ -113,6 +119,9 @@ def met(event):
     user.perms = ["USER"]
     save(user)
     event.done()
+
+
+met.perm = "OPER"
 
 
 def opr(event):
@@ -135,3 +144,6 @@ def opr(event):
         user.perms.append("OPER")
     write(user)
     event.done()
+
+
+opr.perm = "OPER"

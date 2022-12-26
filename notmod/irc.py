@@ -459,7 +459,7 @@ class IRC(Handler, Output):
                 event.txt = event.txt[len(self.cfg.nick)+1:]
             else:
                 return
-            if self.cfg.users and not Users.allowed(event.origin, "USER"):
+            if self.cfg.users and not Users.allowed(event.origin, "OPER,USER"):
                 return
             splitted = event.txt.split()
             splitted[0] = splitted[0].lower()
@@ -618,35 +618,7 @@ def icfg(event):
         event.done()
 
 
-def dlt(event):
-    if not event.args:
-        event.reply("dlt <username>")
-        return
-    selector = {"user": event.args[0]}
-    for obj in find("user", selector):
-        obj.__deleted__ = True
-        save(obj)
-        event.done()
-        break
-
-
-def met(event):
-    if not event.rest:
-        nmr = 0
-        for obj in find("user"):
-            event.reply("%s %s %s %s" % (
-                                         nmr,
-                                         obj.user,
-                                         obj.perms,
-                                         elapsed(time.time() - fntime(obj.__fnm__)))
-                                        )
-            nmr += 1
-        return
-    user = User()
-    user.user = event.rest
-    user.perms = ["USER"]
-    save(user)
-    event.done()
+icfg.perm = "OPER"
 
 
 def mre(event):
@@ -677,6 +649,9 @@ def pwd(event):
     base = base64.b64encode(enc)
     dcd = base.decode("ascii")
     event.reply(dcd)
+
+
+pwd.perm = "OPER"
 
 
 Class.add(Config)

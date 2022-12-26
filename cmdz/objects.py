@@ -473,7 +473,7 @@ def search(obj, selector):
             val = getattr(obj, key)
         except AttributeError:
             continue
-        if str(value) in str(val):
+        if str(val) in spl(value):
             res = True
             break
     return res
