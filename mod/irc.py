@@ -1,9 +1,9 @@
 # This file is placed in the Public Domain.
 # pylint: disable=C0115,C0116,R0201,C0413,R0902,R0903,W0201,W0613
-# pylint: disable=E1101,R0912,R0915,R0904,W0221
+# pylint: disable=E1101,R0912,R0915,R0904,W0221,E0402
 
 
-"irc"
+"internet relay chat"
 
 
 import base64
@@ -18,22 +18,20 @@ import threading
 import _thread
 
 
-from cmdz.message import Event
-from cmdz.handler import Command, Handler
-from cmdz.objects import Class, Default, Object
-from cmdz.objects import edit, fntime, find, keys, last, locked, printable
-from cmdz.objects import register, save, update
-from cmdz.running import Cfg
-from cmdz.threads import elapsed, launch
+from cmdz import Class, Command, Default, Event, Handler, Object
+from cmdz import edit, find, keys, last, printable, save, update
+from cmdz import elapsed, launch, fntime, locked, register
 
 
 def __dir__():
     return (
             'Config',
             'IRC',
-            'icfg',
-            'dlt',
+            "Users",
+            "User",
             'init',
+            'dlt',
+            'icfg',
             'met',
             'mre',
             'pwd'
@@ -43,7 +41,7 @@ def __dir__():
 __all__ = __dir__()
 
 
-NAME = Cfg.name or "cmdz"
+NAME = "cmdz"
 REALNAME = "program your own commands"
 
 
@@ -74,7 +72,7 @@ class Config(Default):
     servermodes = ""
     sleep = 60
     username = "%s" % NAME
-    users = True
+    users = False
 
     def __init__(self):
         super().__init__()
@@ -90,6 +88,9 @@ class Config(Default):
         self.sleep = Config.sleep
         self.username = Config.username
         self.users = Config.users
+
+
+Class.add(Config)
 
 
 class IEvent(Event):
@@ -136,15 +137,17 @@ class Output(Object):
             self.cache[channel] = []
         self.cache[channel].extend(txtlist)
 
-    def get(self, channel):
+    def gettxt(self, channel):
         value = None
         try:
             value = self.cache[channel].pop(0)
-        except IndexError:
+        except (KeyError, IndexError):
             pass
         return value
 
     def oput(self, channel, txt):
+        if channel not in self.cache:
+            self.cache[channel] = []
         self.oqueue.put_nowait((channel, txt))
 
     def output(self):
@@ -155,7 +158,10 @@ class Output(Object):
             if self.dostop.is_set():
                 break
             wrapper = TextWrap()
-            txtlist = wrapper.wrap(txt)
+            try:
+                txtlist = wrapper.wrap(txt)
+            except AttributeError:
+                continue
             if len(txtlist) > 3:
                 self.extend(channel, txtlist)
                 self.dosay(channel, "%s put in cache, use !mre to show more" % len(txtlist))
@@ -222,14 +228,14 @@ class IRC(Handler, Output):
 
     def auth(self, event):
         time.sleep(1.0)
-        self.raw("AUTHENTICATE %s" % self.cfg.password)
+        self.direct("AUTHENTICATE %s" % self.cfg.password)
 
     def cap(self, event):
         time.sleep(1.0)
         if self.cfg.password and "ACK" in event.arguments:
-            self.raw("AUTHENTICATE PLAIN")
+            self.direct("AUTHENTICATE PLAIN")
         else:
-            self.raw("CAP REQ :sasl")
+            self.direct("CAP REQ :sasl")
 
     @locked(saylock)
     def command(self, cmd, *args):
@@ -356,8 +362,8 @@ class IRC(Handler, Output):
         assert nck
         assert self.cfg.username
         assert self.cfg.realname
-        self.raw("NICK %s" % nck)
-        self.raw(
+        self.direct("NICK %s" % nck)
+        self.direct(
                  "USER %s %s %s :%s" % (self.cfg.username,
                  server,
                  server,
@@ -459,7 +465,7 @@ class IRC(Handler, Output):
                 event.txt = event.txt[len(self.cfg.nick)+1:]
             else:
                 return
-            if self.cfg.users and not Users.allowed(event.origin, "OPER,USER"):
+            if self.cfg.users and not Users.allowed(event.origin, "USER"):
                 return
             splitted = event.txt.split()
             splitted[0] = splitted[0].lower()
@@ -527,7 +533,7 @@ class IRC(Handler, Output):
             self.channels.append(self.cfg.channel)
         self.connected.clear()
         self.joined.clear()
-        launch(Output.start, self)
+        Output.start(self)
         launch(Handler.start, self)
         launch(
                self.doconnect,
@@ -603,6 +609,9 @@ class User(Object):
             update(self, val)
 
 
+Class.add(User)
+
+
 def icfg(event):
     config = Config()
     last(config)
@@ -615,10 +624,38 @@ def icfg(event):
     else:
         edit(config, event.sets)
         save(config)
-        event.done()
+        event.ok()
 
 
-icfg.perm = "OPER"
+def dlt(event):
+    if not event.args:
+        event.reply("dlt <username>")
+        return
+    selector = {"user": event.args[0]}
+    for obj in find("user", selector):
+        obj.__deleted__ = True
+        save(obj)
+        event.ok()
+        break
+
+
+def met(event):
+    if not event.rest:
+        nmr = 0
+        for obj in find("user"):
+            event.reply("%s %s %s %s" % (
+                                         nmr,
+                                         obj.user,
+                                         obj.perms,
+                                         elapsed(time.time() - fntime(obj.__fnm__)))
+                                        )
+            nmr += 1
+        return
+    user = User()
+    user.user = event.rest
+    user.perms = ["USER"]
+    save(user)
+    event.ok()
 
 
 def mre(event):
@@ -633,7 +670,7 @@ def mre(event):
         event.reply("no output in %s cache." % event.channel)
         return
     for _x in range(3):
-        txt = bot.get(event.channel)
+        txt = bot.gettxt(event.channel)
         if txt:
             bot.say(event.channel, txt)
     size = bot.size(event.channel)
@@ -649,10 +686,3 @@ def pwd(event):
     base = base64.b64encode(enc)
     dcd = base.decode("ascii")
     event.reply(dcd)
-
-
-pwd.perm = "OPER"
-
-
-Class.add(Config)
-Class.add(User)

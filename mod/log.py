@@ -8,8 +8,7 @@
 import time
 
 
-from cmdz.objects import Class, Object, find, fntime, save
-from cmdz.threads import elapsed
+from cmdz import Class, Object, elapsed, find, fntime, save
 
 
 def __dir__():
@@ -43,4 +42,4 @@ def log(event):
     obj = Log()
     obj.txt = event.rest
     save(obj)
-    event.done()
+    event.ok()

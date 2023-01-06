@@ -9,9 +9,7 @@ import threading
 import time
 
 
-from cmdz.objects import Object, update
-from cmdz.handler import Bus
-from cmdz.threads import elapsed, name
+from cmdz import Bus, Object, elapsed, name, update
 
 
 def __dir__():

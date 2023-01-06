@@ -10,8 +10,7 @@ import os
 import time
 
 
-from cmdz.objects import Class, Object, find, fntime, printable, save
-from cmdz.threads import elapsed
+from cmdz import Class, Object, elapsed, find, fntime, printable, save
 
 
 def __dir__():

@@ -2,21 +2,20 @@
 # pylint: disable=C0115,C0116,R0903
 
 
-"todo's"
+"todo"
 
 
 import time
 
 
-from cmdz.objects import Class, Object, find, fntime, save
-from cmdz.threads import elapsed
+from cmdz import Class, Object, elapsed, find, fntime, save
 
 
 
 def __dir__():
     return (
             'Todo',
-            'tdo',
+            'todo',
            )
 
 
@@ -44,4 +43,4 @@ def tdo(event):
     obj = Todo()
     obj.txt = event.rest
     save(obj)
-    event.done()
+    event.ok()

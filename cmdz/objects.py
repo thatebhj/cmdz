@@ -2,7 +2,7 @@
 # pylint: disable=C0112,C0115,C0116,W0613,W0108,R0903
 
 
-"""big Object
+"""objects
 
 
 this module contains a big Object class that provides a clean, no methods,
@@ -12,8 +12,8 @@ the object, is easily being updated from a on disk stored json (dict).
 
 basic usage is this:
 
->>> import op
->>> o = op.Object()
+>>> import cmdz
+>>> o = cmdz.Object()
 >>> o.key = "value"
 >>> o.key
 'value'
@@ -23,7 +23,7 @@ like get, items, keys, register, set, update and values.
 
 load/save from/to disk:
 
->>> from op import Object, load, save
+>>> from cmdz import Object, load, save
 >>> o = Object()
 >>> o.key = "value"
 >>> p = save(o)
@@ -35,12 +35,10 @@ load/save from/to disk:
 big Objects can be searched with database functions and uses read-only files
 to improve persistence and a type in filename for reconstruction:
 
-'op.obj.Object/11ee5f11bd874f1eaa9005980f9d7a94/2021-08-31/15:31:05.717063'
-
->>> from op import Object, save
+>>> from cmdz import Object, save
 >>> o = Object()
 >>> save(o)  # doctest: +ELLIPSIS
-'op.obj.Object/...'
+'cmdz.objects.Object/...'
 
 great for giving objects peristence by having their state stored in files.
 
@@ -48,7 +46,6 @@ great for giving objects peristence by having their state stored in files.
 
 
 import datetime
-import inspect
 import json
 import os
 import pathlib
@@ -85,7 +82,6 @@ def __dir__():
             'printable',
             'register',
             'save',
-            'scan',
             'spl',
             'update',
             'values',
@@ -371,15 +367,15 @@ class Db:
             return res[-1]
         return None
 
+
 def fnclass(path):
-    pth = []
     try:
         _rest, *pth = path.split("store")
+        splitted = pth[0].split(os.sep)
+        return splitted[1]
     except ValueError:
         pass
-    if not pth:
-        pth = path.split(os.sep)
-    return pth[0]
+    return None
 
 
 def fns(otp, timed=None):
@@ -408,6 +404,7 @@ def fns(otp, timed=None):
                         continue
                     res.append(path2)
     return sorted(res, key=lambda x: fntime(x))
+
 
 def fntime(daystr):
     daystr = daystr.replace("_", ":")
@@ -473,7 +470,7 @@ def search(obj, selector):
             val = getattr(obj, key)
         except AttributeError:
             continue
-        if str(val) in spl(value):
+        if str(value) in str(val):
             res = True
             break
     return res
@@ -563,11 +560,6 @@ def cdir(path):
         path = os.path.dirname(path)
     ppp = pathlib.Path(path)
     ppp.mkdir(parents=True, exist_ok=True)
-
-
-def scan(mod):
-    for _key, clz in inspect.getmembers(mod, inspect.isclass):
-        Class.add(clz)
 
 
 def spl(txt):

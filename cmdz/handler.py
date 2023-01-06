@@ -5,16 +5,13 @@
 "handler"
 
 
-import inspect
 import queue
-import sys
 import threading
 import time
 
 
 from .objects import Object
 from .threads import launch
-from .usersdb import Users
 
 
 def __dir__():
@@ -23,11 +20,11 @@ def __dir__():
             'Callback',
             'Command',
             'Handler',
-            'scan',
            )
 
 
 __all__ = __dir__()
+
 
 
 class Bus(Object):
@@ -65,22 +62,26 @@ class Callback(Object):
     cbs = Object()
     errors = []
 
-    def register(self, typ, cbs):
-        if typ not in self.cbs:
-            setattr(self.cbs, typ, cbs)
+    @staticmethod
+    def register(typ, cbs):
+        if typ not in Callback.cbs:
+            setattr(Callback.cbs, typ, cbs)
 
-    def callback(self, event):
-        func = getattr(self.cbs, event.type, None)
+    @staticmethod
+    def callback(event):
+        func = getattr(Callback.cbs, event.type, None)
         if not func:
             event.ready()
             return
         event.__thr__ = launch(func, event)
 
-    def dispatch(self, event):
-        self.callback(event)
+    @staticmethod
+    def dispatch(event):
+        Callback.callback(event)
 
-    def get(self, typ):
-        return getattr(self.cbs, typ)
+    @staticmethod
+    def get(typ):
+        return getattr(Callback.cbs, typ)
 
 
 class Command(Object):
@@ -101,15 +102,11 @@ class Command(Object):
         if not evt.isparsed:
             evt.parse()
         func = Command.get(evt.cmd)
-        if "perm" in dir(func):
-            if not Users.allowed(evt.userhost, func.perm):
-                return
         if func:
             try:
                 func(evt)
             except Exception as ex:
-                tbk = sys.exc_info()[2]
-                evt.__exc__ = ex.with_traceback(tbk)
+                evt.__exc__ = ex.with_traceback(ex.__traceback__)
                 Command.errors.append(evt)
                 evt.ready()
                 return None
@@ -140,7 +137,7 @@ class Handler(Callback):
         self.raw(txt)
 
     def handle(self, event):
-        self.dispatch(event)
+        Callback.dispatch(event)
 
     def loop(self):
         while not self.stopped.set():
@@ -172,12 +169,3 @@ class Handler(Callback):
     def wait(self):
         while 1:
             time.sleep(1.0)
-
-
-def scan(mod):
-    for key, cmd in inspect.getmembers(mod, inspect.isfunction):
-        if key.startswith("cb"):
-            continue
-        names = cmd.__code__.co_varnames
-        if "event" in names:
-            Command.add(cmd)

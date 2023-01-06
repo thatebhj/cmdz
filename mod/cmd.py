@@ -5,7 +5,7 @@
 "commands"
 
 
-from cmdz.handler import Command
+from cmdz import Command
 
 
 def __dir__():

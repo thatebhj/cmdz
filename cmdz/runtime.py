@@ -5,14 +5,14 @@
 "runtime"
 
 
+import inspect
 import os
-import sys
 import time
 
 
 from .message import Event, Parsed
-from .handler import scan
-from .objects import Default, spl, update
+from .handler import Command
+from .objects import Class, Default, spl, update
 
 
 def __dir__():
@@ -22,7 +22,7 @@ def __dir__():
             "boot",
             "command",
             "parse",
-            'scanner',
+            'scanpkg',
             'scandir',
             "wait"
            )
@@ -33,8 +33,11 @@ class Config(Default):
     pass
 
 
-def boot():
-    prs = parse()
+Class.add(Config)
+
+
+def boot(txt):
+    prs = parse(txt)
     if "c" in prs.opts:
         Cfg.console = True
     if "d" in prs.opts:
@@ -76,31 +79,41 @@ def listmod(path):
     return res
 
 
-def parse(txt=None):
-    if txt is None:
-        txt = " ".join(sys.argv[1:])
+def parse(txt):
     prs = Parsed()
     prs.parse(txt)
     update(Cfg.prs, prs)
     return prs
 
 
-def scanner(pkg, importer, mods=None):
+def scan(mod):
+    for key, cmd in inspect.getmembers(mod, inspect.isfunction):
+        if key.startswith("cb"):
+            continue
+        names = cmd.__code__.co_varnames
+        if "event" in names:
+            Command.add(cmd)
+
+
+def scanpkg(pkg, importer, mods=None):
     path = pkg.__path__[0]
     name = pkg.__name__
-    scandir(path, importer, name, mods)
+    return scandir(path, importer, name)
 
 
-def scandir(path, importer, pname, mods=None):
+def scandir(path, importer, pname=None, mods=None):
     res = []
+    if pname is None:
+        pname = path.split(os.sep)[-1]
     for modname in listmod(path):
+        if not modname:
+            continue
         if mods and not include(modname, spl(mods)):
             continue
         mname = "%s.%s" % (pname, modname)
-        ppath = os.path.join("%s/%s.py" % (path, modname))
+        ppath = os.path.join(path, "%s.py" % modname)
         mod = importer(mname, ppath)
         res.append(mod)
-        scan(mod)
     return res
 
 
@@ -109,9 +122,6 @@ def wait(func=None):
         time.sleep(1.0)
         if func:
             func()
-
-
-## runtime
 
 
 Cfg = Config()

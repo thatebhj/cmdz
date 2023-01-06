@@ -18,12 +18,9 @@ from urllib.parse import quote_plus, urlencode
 from urllib.request import Request, urlopen
 
 
-from cmdz.handler import Bus
-from cmdz.objects import Class, Default, Object, Db, find, fntime, last, printable
-from cmdz.objects import register,  save, spl, update
-from cmdz.objects import edit, locked, write
-from cmdz.running import Cfg
-from cmdz.threads import Repeater, elapsed, launch
+from cmdz import Bus, Class, Cfg, Db, Default, Object, Repeater
+from cmdz import edit, elapsed, find, fntime, last, launch
+from cmdz import locked, printable, register, save, spl, write, update
 
 
 def __dir__():
@@ -209,7 +206,6 @@ def gettinyurl(url):
 
 
 def geturl(url):
-    "http url fetcher."
     url = urllib.parse.urlunparse(urllib.parse.urlparse(url))
     req = urllib.request.Request(url)
     req.add_header("User-agent", useragent("oirc"))
@@ -243,7 +239,7 @@ def dpl(event):
         if feed:
             edit(feed, setter)
             save(feed)
-            event.done()
+            event.ok()
 
 
 def ftc(event):
@@ -270,7 +266,7 @@ def nme(event):
         got.append(feed)
     for feed in got:
         save(feed)
-    event.done()
+    event.ok()
 
 
 def rem(event):
@@ -281,7 +277,7 @@ def rem(event):
     for feed in find("rss", selector):
         feed.__deleted__ = True
         save(feed)
-    event.done()
+    event.ok()
 
 
 def rss(event):
@@ -309,4 +305,4 @@ def rss(event):
     feed = Rss()
     feed.rss = event.args[0]
     save(feed)
-    event.done()
+    event.ok()
